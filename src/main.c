@@ -4,6 +4,7 @@
 
 #include <graph.h>
 #include <partitioning.h>
+#include <neighborhood.h>
 
 void usage(char *name){
   printf("Usage : %s filename\n", name);
@@ -17,18 +18,22 @@ bool my_valid(struct solution *s){
 int main(int argc, char **argv){
   if(argc != 2)
     usage(argv[0]);
-  graph g;
+  graph g = NULL;
   g = graph_create(argv[1]);
   graph_dump(g);
-  struct solution *s;
-  s = solution_create(g);
   printf("\n");
-  solution_dump(s);
   
-  struct solution *s2 = solution_copy(s);
-  solution_dump(s2);
-  solution_destruct(s2);
+  struct solution *s = NULL;
+  s = solution_create(g);
+  solution_dump(s);  
   printf("\nf_opt(s) = %f\n", f_opt(g, s, my_valid));
+  printf("\n");
+  
+  struct neighborhood *n = NULL;
+  n = swap(s);
+  neighborhood_dump(n);
+  
+  neighborhood_destruct(n);
   solution_destruct(s);
   graph_destruct(g);
   return EXIT_SUCCESS;

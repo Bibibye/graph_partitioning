@@ -78,13 +78,9 @@ float f_opt(graph g, struct solution *s, valid v){
   if(!v(s))
     return INVALID_SOLUTION;
   for(unsigned i = 0; i < K - 1; ++i)
-    for(unsigned *v1 = s->partitions[i]; 
-	v1 < s->partitions[i] + s->sizes[i]; 
-	++v1)
+    for(unsigned v1 = 0; v1 < s->sizes[i]; ++v1)
       for(unsigned j = i + 1; j < K; ++j)
-	for(unsigned *v2 = s->partitions[j]; 
-	    v2 < s->partitions[j] + s->sizes[j]; 
-	    ++v2)
-	  result += graph_adjacent(g, *v1, *v2);
+	for(unsigned v2 = 0; v2 < s->sizes[j]; ++v2)
+	  result += graph_adjacent(g, s->partitions[i][v1], s->partitions[j][v2]);
   return result;
 }
