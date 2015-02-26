@@ -20,6 +20,7 @@ struct solution{
 typedef bool (*valid)(struct solution*);
 
 struct solution *solution_create(graph g);
+struct solution *solution_copy(struct solution *s);
 void solution_destruct(struct solution *s);
 void solution_dump(struct solution *s);
 

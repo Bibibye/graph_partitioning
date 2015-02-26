@@ -24,6 +24,10 @@ int main(int argc, char **argv){
   s = solution_create(g);
   printf("\n");
   solution_dump(s);
+  
+  struct solution *s2 = solution_copy(s);
+  solution_dump(s2);
+  solution_destruct(s2);
   printf("\nf_opt(s) = %f\n", f_opt(g, s, my_valid));
   solution_destruct(s);
   graph_destruct(g);
