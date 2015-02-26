@@ -84,3 +84,10 @@ void graph_dump(graph g){
     printf("\n");
   }
 }
+
+unsigned graph_nb_vertices(graph g){
+  return g->nb_vertices;
+}
+unsigned graph_nb_edges(graph g){
+  return g->nb_edges;
+}
