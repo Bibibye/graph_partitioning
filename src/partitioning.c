@@ -87,3 +87,11 @@ float f_opt(graph g, struct solution *s, valid v){
 	  result += graph_adjacent(g, s->partitions[i][v1], s->partitions[j][v2]);
   return result;
 }
+
+bool v_small(struct solution* s) {
+	for(int i = 0; i < K - 1; i++)
+		if(s->sizes[i] < s->sizes[i+1] - 1 ||
+		s->sizes[i] > s->sizes[i+1] + 1)
+		return false;
+	return true;
+}
