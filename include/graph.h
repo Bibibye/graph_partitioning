@@ -1,8 +1,6 @@
 #ifndef _GRAPH_H_
 #define _GRAPH_H_
 
-#define EDGE(i, j, nb_vertices) ((i-1) + (j-1) * (nb_vertices))
-
 typedef struct graph *graph;
 
 graph graph_create(char *filename);

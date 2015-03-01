@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#define EDGE(i, j, nb_vertices) ((i-1) + (j-1) * (nb_vertices))
+
 struct graph{
   unsigned nb_edges;
   unsigned nb_vertices;
