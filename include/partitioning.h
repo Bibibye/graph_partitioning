@@ -32,4 +32,14 @@ void solution_dump(struct solution *s);
  */
 float f_opt(graph g, struct solution *s, valid v);
 
+
+bool v_petit(struct solution* s) {
+	for(int i = 0; i < K - 1; i++)
+		if(s->sizes[i] < s->sizes[i+1] - 1 ||
+		s->sizes[i] > s->sizes[i+1] + 1)
+		return false;
+	return true;
+}
+
+
 #endif /* _PARTITIONING_H_ */
