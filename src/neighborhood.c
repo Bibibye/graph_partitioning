@@ -45,7 +45,44 @@ struct neighborhood *sweep(struct solution *s){
 }
 
 struct neighborhood *pick_n_drop(struct solution *s){
-  return NULL;
+  struct neighborhood *n = NULL;
+  n = malloc(sizeof(*n));
+  if(n == NULL){
+    perror("malloc");
+    exit(EXIT_FAILURE);
+  }
+  
+  n->size = 0;
+  for(unsigned i = 0; i < K; ++i)
+    n->size += s->sizes[i] * (K-1);
+  
+  n->neighbors = malloc(n->size * sizeof(*n->neighbors));
+  if(n->neighbors == NULL){
+    perror("malloc");
+    exit(EXIT_FAILURE);
+  }
+  
+  unsigned nb_neighbors = 0;
+  for(unsigned p1 = 0; p1 < K; ++p1)
+    for(unsigned v = 0; v < s->sizes[p1]; ++v)
+      for(unsigned p2 = 0; p2 < K; ++p2)
+	if(p1 != p2){
+	  struct solution *new_solution = solution_copy(s);
+	  
+	  new_solution->partitions[p2] = realloc(new_solution->partitions[p2],
+						 (new_solution->sizes[p2] + 1) * 
+						 sizeof(*new_solution->partitions[p2]));
+	  new_solution->partitions[p2][new_solution->sizes[p2]] = new_solution->partitions[p1][v];
+	  ++new_solution->sizes[p2];
+	  
+	  for(unsigned i = v + 1; i < new_solution->sizes[p1]; ++i)
+	    new_solution->partitions[p1][i-1] = new_solution->partitions[p1][i];
+	  --new_solution->sizes[p1];
+	  
+	  n->neighbors[nb_neighbors] = new_solution;
+	  ++nb_neighbors;
+	}
+  return n;
 }
 
 void neighborhood_destruct(struct neighborhood *n){
