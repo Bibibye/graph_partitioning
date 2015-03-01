@@ -42,9 +42,16 @@ int main(int argc, char **argv){
   struct neighborhood *n2 = NULL;
   n2 = pick_n_drop(s);
   neighborhood_dump(n2);
+
+  printf(SEPARATOR);
   
-  neighborhood_destruct(n1);
+  struct neighborhood *n3 = NULL;
+  n3 = sweep(s);
+  neighborhood_dump(n3);
+
+  neighborhood_destruct(n1);  
   neighborhood_destruct(n2);
+  neighborhood_destruct(n3);
   solution_destruct(s);
   graph_destruct(g);
   return EXIT_SUCCESS;

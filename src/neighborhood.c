@@ -41,7 +41,49 @@ struct neighborhood *swap(struct solution *s){
 }
 
 struct neighborhood *sweep(struct solution *s){
-  return NULL;
+  struct neighborhood *n = NULL;
+  n = malloc(sizeof(*n));
+  if(n == NULL){
+    perror("malloc");
+    exit(EXIT_FAILURE);
+  }
+  
+  n->size = 1;
+  for(unsigned i = 0; i < K; ++i)
+    n->size *= s->sizes[i];
+  
+  n->neighbors = malloc(n->size * sizeof(*n->neighbors));
+  if(n->neighbors == NULL){
+    perror("malloc");
+    exit(EXIT_FAILURE);
+  }
+  
+  unsigned nb_neighbors = 0;
+  unsigned permutation[K] = {0};
+  while(nb_neighbors != n->size){
+    struct solution *new_solution = solution_copy(s);
+    unsigned tmp;
+    unsigned previous = new_solution->partitions[K-1][permutation[K-1]];
+    for(unsigned i = 0; i < K; ++i){
+      tmp = new_solution->partitions[i][permutation[i]];
+      new_solution->partitions[i][permutation[i]] = previous;
+      previous = tmp;
+    }
+    n->neighbors[nb_neighbors] = new_solution;
+    
+    for(unsigned i = 0; i < K; ++i){
+      if(permutation[i] == new_solution->sizes[i] - 1){
+	permutation[i] = 0;
+      }
+      else{
+	++permutation[i];
+	break;
+      }
+    }
+    ++nb_neighbors;
+  }
+
+  return n;
 }
 
 struct neighborhood *pick_n_drop(struct solution *s){
