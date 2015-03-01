@@ -89,9 +89,10 @@ float f_opt(graph g, struct solution *s, valid v){
 }
 
 bool v_small(struct solution* s) {
-	for(int i = 0; i < K - 1; i++)
-		if(s->sizes[i] < s->sizes[i+1] - 1 ||
-		s->sizes[i] > s->sizes[i+1] + 1)
+	for(int i = 0; i < K; i++)
+	   for(int j = 0; j < K; j++)
+		if(s->sizes[i] < s->sizes[j] - 1 ||
+		s->sizes[i] > s->sizes[j] + 1)
 		return false;
 	return true;
 }
