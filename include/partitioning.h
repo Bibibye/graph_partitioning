@@ -7,7 +7,9 @@
 #include <graph.h>
 
 // number of partitions
+#ifndef K
 #define K 2
+#endif /* K */
 
 #define INVALID_SOLUTION FLT_MAX
 

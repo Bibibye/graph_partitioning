@@ -39,9 +39,12 @@ struct solution *solution_create(graph g){
 void solution_dump(struct solution *s){
   for(int i = 0; i < K; ++i){
     printf("{");
-    for(int j = 0; j < s->sizes[i]; ++j)
-      printf("%u%c", s->partitions[i][j], j == s->sizes[i] - 1 ? '}' : ' ');
-    printf("\n");
+    for(int j = 0; j < s->sizes[i]; ++j){
+      printf("%u", s->partitions[i][j]);
+      if(j != s->sizes[i] - 1)
+	printf(" ");
+    }
+    printf("}\n");
   }
 }
 
