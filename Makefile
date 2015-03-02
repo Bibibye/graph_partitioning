@@ -9,6 +9,12 @@ CFLAGS= -c -std=c99 -g -Wall -Werror -DK=$(K)
 CPPFLAGS= -I$(INCLUDE_DIR) -D_GNU_SOURCE
 LDFLAGS=
 
+ifeq ($(DEBUG),yes)
+	CFLAGS+= -g -DDEBUG_MODE
+else
+	CFLAGS+= -O2
+endif
+
 SRC=$(wildcard $(SRC_DIR)/*.c)
 OBJS=$(SRC:%.c=%.o)
 
@@ -30,3 +36,9 @@ clean:
 
 mrproper: clean
 	$(RM) $(OUT)
+	find -name "*.d" -delete
+
+include $(SRC:.c=.d)
+
+%.d: %.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -MM $^ > $@
