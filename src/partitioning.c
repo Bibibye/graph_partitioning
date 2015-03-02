@@ -78,7 +78,7 @@ struct solution *solution_copy(struct solution *s){
 
 float f_opt(graph g, struct solution *s, valid v){
   float result = 0;
-  if(!v(s))
+  if(!v(s) || s == NULL)
     return INVALID_SOLUTION;
   for(unsigned i = 0; i < K - 1; ++i)
     for(unsigned v1 = 0; v1 < s->sizes[i]; ++v1)
