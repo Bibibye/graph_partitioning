@@ -33,6 +33,6 @@ void solution_dump(struct solution *s);
  */
 float f_opt(graph g, struct solution *s, valid v);
 
-bool v_small(struct solution* s);
+bool one_percent_error(struct solution* s);
 
 #endif /* _PARTITIONING_H_ */

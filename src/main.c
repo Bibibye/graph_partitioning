@@ -80,8 +80,9 @@ int main(int argc, char **argv){
   
   g = graph_create(argv[3]);
   
-  s = h(g, n, v_small);
+  s = h(g, n, one_percent_error);
   solution_dump(s);
+  printf("f_opt = %f\n", f_opt(g, s, one_percent_error));
   
   solution_destruct(s);
   graph_destruct(g);

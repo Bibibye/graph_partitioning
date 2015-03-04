@@ -2,9 +2,11 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <math.h>
 
 #include <partitioning.h>
 #include <graph.h>
+#include <debug.h>
 
 struct solution *solution_create(graph g){
   struct solution *s = NULL;
@@ -88,11 +90,20 @@ float f_opt(graph g, struct solution *s, valid v){
   return result;
 }
 
-bool v_small(struct solution* s) {
-	for(int i = 0; i < K; i++)
-	   for(int j = 0; j < K; j++)
-		if(s->sizes[i] < s->sizes[j] - 1 ||
-		s->sizes[i] > s->sizes[j] + 1)
-		return false;
-	return true;
+bool one_percent_error(struct solution* s) {
+  unsigned max_difference = 0;
+  unsigned total_size = s->sizes[K-1];
+  for(unsigned i = 0; i < K - 1; ++i){
+    total_size += s->sizes[i];
+    for(unsigned j = i + 1; j < K; ++j){
+      unsigned difference = (s->sizes[i] > s ->sizes[j]) ?
+	s->sizes[i] - s->sizes[j] :
+	s->sizes[j] - s->sizes[i];
+      if(difference > max_difference)
+	max_difference = difference;
+    }
+  }
+  unsigned max_error = (unsigned)ceil(total_size * (1./100.));
+  DEBUG("max_error = %d difference = %d\n", max_error, max_difference);
+  return max_difference <= max_error;
 }

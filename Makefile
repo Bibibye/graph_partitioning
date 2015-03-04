@@ -7,7 +7,7 @@ K=2
 CC=gcc
 CFLAGS= -c -std=c99 -g -Wall -Werror -DK=$(K)
 CPPFLAGS= -I$(INCLUDE_DIR) -D_GNU_SOURCE
-LDFLAGS=
+LDFLAGS= -lm
 
 ifeq ($(DEBUG),yes)
 	CFLAGS+= -g -DDEBUG_MODE
