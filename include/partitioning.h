@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <float.h>
+
 #include <graph.h>
 
 // number of partitions

@@ -18,13 +18,13 @@ endif
 SRC=$(wildcard $(SRC_DIR)/*.c)
 OBJS=$(SRC:%.c=%.o)
 
-OUT=a.out
+OUT=partition
 
 .PHONY: clean all mrproper
 
 all: $(OUT)
 
-a.out: $(OBJS)
+$(OUT): $(OBJS)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 %.o: %.c

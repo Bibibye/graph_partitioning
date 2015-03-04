@@ -1,68 +1,89 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include <graph.h>
 #include <partitioning.h>
 #include <neighborhood.h>
 #include <explicit_enumeration.h>
+#include <gradient_descent.h>
 
-#define SEPARATOR "------------------------------\n"
+typedef struct solution* (*heuristic_impl)(graph, get_neighborhood, valid);
 
-void usage(char *name){
-  printf("Usage : %s filename\n", name);
+struct heuristic_info{
+  char *name;
+  heuristic_impl function;
+};
+
+struct heuristic_info heuristics[] = {
+  {"explicit_enum", explicit_enumeration},
+  {"gradient_descent", gradient_descent}
+};
+
+#define NB_HEURISTICS (sizeof(heuristics)/sizeof(struct heuristic_info))
+
+struct neighborhood_info{
+  char *name;
+  get_neighborhood function;
+};
+
+struct neighborhood_info neighborhoods[] = {
+  {"swap", swap},
+  {"sweep", sweep},
+  {"pick_n_drop", pick_n_drop}
+};
+
+#define NB_NEIGHBORHOODS (sizeof(neighborhoods)/sizeof(struct neighborhood_info))
+
+static void usage(const char *name){
+  printf("Usage : %s <heuristic> <neighborhood> <filename>\n\nHeuristics available are :\n", 
+	 name);
+  for(unsigned i = 0; i < NB_HEURISTICS; ++i)
+    printf("\t- %s\n", heuristics[i].name);
+  printf("\nNeighborhoods available are :\n");
+  for(unsigned i = 0; i < NB_NEIGHBORHOODS; ++i)
+    printf("\t- %s\n", neighborhoods[i].name);
   exit(EXIT_FAILURE);
 }
 
-bool my_valid(struct solution *s){
-  return true;
+static heuristic_impl find_heuristic(const char *name){
+  for(unsigned i = 0; i < NB_HEURISTICS; ++i)
+    if(!strcmp(heuristics[i].name, name))
+      return heuristics[i].function;
+  return NULL;
+}
+
+static get_neighborhood find_neighborhood(const char *name){
+  for(unsigned i = 0; i < NB_NEIGHBORHOODS; ++i)
+    if(!strcmp(neighborhoods[i].name, name))
+      return neighborhoods[i].function;
+  return NULL;
 }
 
 int main(int argc, char **argv){
-  if(argc != 2)
+  if(argc != 4)
     usage(argv[0]);
+  
+  heuristic_impl h = NULL;
   graph g = NULL;
-  g = graph_create(argv[1]);
-  graph_dump(g);
+  get_neighborhood n = NULL;
+  struct solution *s = NULL;
   
-  printf(SEPARATOR);
+  h = find_heuristic(argv[1]);
+  if(h == 0)
+    usage(argv[0]);
   
-  struct solution *s1 = NULL;
-  s1 = solution_create(g);
-  solution_dump(s1);  
-  printf("\nf_opt(s1) = %f\n", f_opt(g, s1, my_valid));
+  n = find_neighborhood(argv[2]);
+  if(n == NULL)
+    usage(argv[0]);
   
-  printf(SEPARATOR);
+  g = graph_create(argv[3]);
   
-  struct neighborhood *n1 = NULL;
-  n1 = swap(s1);
-  neighborhood_dump(n1);
+  s = h(g, n, v_small);
+  solution_dump(s);
   
-  printf(SEPARATOR);
-  
-  struct neighborhood *n2 = NULL;
-  n2 = pick_n_drop(s1);
-  neighborhood_dump(n2);
-
-  printf(SEPARATOR);
-  
-  struct neighborhood *n3 = NULL;
-  n3 = sweep(s1);
-  neighborhood_dump(n3);
-
-  printf(SEPARATOR);
-  
-  struct solution *s2 = NULL;
-  printf("Explicit enumeration : \n");
-  s2 = explicit_enumeration(g, NULL, v_small);
-  solution_dump(s2);
-  printf("f_opt = %f\n", f_opt(g, s2, v_small));
-  
-  neighborhood_destruct(n1);  
-  neighborhood_destruct(n2);
-  neighborhood_destruct(n3);
-  solution_destruct(s1);
-  solution_destruct(s2);
+  solution_destruct(s);
   graph_destruct(g);
   return EXIT_SUCCESS;
 }
