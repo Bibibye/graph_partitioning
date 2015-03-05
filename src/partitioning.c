@@ -92,6 +92,21 @@ struct solution *solution_random(graph g){
   return s;  
 }
 
+bool solution_eq(struct solution *s, struct solution *t) {
+    if(memcmp(s->sizes, t->sizes, K)) return false;
+    for(int i = 0; i < K; i++) {
+        bool fail = true;
+        for(int j = 0; j < K; j++) {
+            if(s->sizes[i] == t->sizes[j]) {
+                if(memcmp(s->partitions[i], t->partitions[j], s->sizes[i]))
+                    fail = false;
+            }
+        }
+        if(fail) return false;
+    } 
+    return true;
+}
+
 void solution_destruct(struct solution *s){
   for(int i = 0; i < K; ++i)
     free(s->partitions[i]);
