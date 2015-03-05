@@ -15,9 +15,11 @@ struct solution* gradient_descent(graph g, get_neighborhood f, valid v){
       if(current_f < best_f){
 	end=false;
 	best_f = current_f;
-	best_s = n->neighbors[i];
+	solution_destruct(best_s);
+	best_s = solution_copy(n->neighbors[i]);
       }
     }
+    neighborhood_destruct(n);
   }
   return best_s;
 }
