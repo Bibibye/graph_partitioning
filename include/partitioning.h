@@ -24,6 +24,7 @@ typedef bool (*valid)(struct solution*);
 
 struct solution *solution_create(graph g);
 struct solution *solution_copy(struct solution *s);
+struct solution *solution_random(graph g);
 void solution_destruct(struct solution *s);
 void solution_dump(struct solution *s);
 

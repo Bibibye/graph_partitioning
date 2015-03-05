@@ -3,7 +3,7 @@
 #include <gradient_descent.h>
 
 struct solution* gradient_descent(graph g, get_neighborhood f, valid v){
-  struct solution* best_s = solution_create(g);
+  struct solution* best_s = solution_random(g);
   float current_f = f_opt(g, best_s, v);
   float best_f = current_f;
   bool end = false;

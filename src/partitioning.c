@@ -7,6 +7,7 @@
 #include <partitioning.h>
 #include <graph.h>
 #include <debug.h>
+#include <random.h>
 
 struct solution *solution_create(graph g){
   struct solution *s = NULL;
@@ -48,6 +49,44 @@ void solution_dump(struct solution *s){
     }
     printf("}\n");
   }
+}
+
+struct solution *solution_random(graph g){
+  struct solution *s = NULL;
+  s = malloc(sizeof(*s));
+  if(s == NULL){
+    perror("malloc");
+    exit(EXIT_FAILURE);
+  }
+  
+  unsigned nb_vertices = graph_nb_vertices(g);
+  
+  for(int i = 0; i < K; ++i){
+    s->sizes[i] = nb_vertices / K;
+    if(i < nb_vertices % K)
+      ++s->sizes[i];
+    s->partitions[i] = malloc(s->sizes[i] * sizeof(*s->partitions));
+    if(s->partitions[i] == NULL){
+      perror("malloc");
+      exit(EXIT_FAILURE);
+    } 
+  }
+  
+  unsigned positions[K] = {0};
+  unsigned non_full_partitions = K;
+  for(unsigned vertex = 1; vertex <= nb_vertices; ++vertex){
+    unsigned choice = random_get_unsigned(non_full_partitions);
+    for(unsigned i = 0; i < K; ++i)
+      if(positions[i] < s->sizes[i]){
+	if(choice == 0) {
+	  s->partitions[i][positions[i]++] = vertex;
+	  break;
+	}
+	else
+	  --choice;
+      }
+  }
+  return s;  
 }
 
 void solution_destruct(struct solution *s){
