@@ -79,7 +79,10 @@ struct solution *solution_random(graph g){
     for(unsigned i = 0; i < K; ++i)
       if(positions[i] < s->sizes[i]){
 	if(choice == 0) {
-	  s->partitions[i][positions[i]++] = vertex;
+	  s->partitions[i][positions[i]] = vertex;
+	  if(++positions[i] == s->sizes[i])
+	    --non_full_partitions;
+	  DEBUG("%d -> %d\n", vertex, i);
 	  break;
 	}
 	else
