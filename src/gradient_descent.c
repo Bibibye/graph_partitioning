@@ -1,14 +1,23 @@
+#include <neighborhood.h>
+#include <partitioning.h>
 #include <gradient_descent.h>
 
-struct solution* gradient_descent(graph g, get_neighborhood f, valid v) {
-	struct solution* ret = solution_create(g);
-	float cur = f_opt(g, ret, v);
-	float init;
-	do {
-		init = cur;
-		struct neighborhood* n = f(ret);
-		cur = f_opt(g, ret, v);
-		neighborhood_destruct(n);
-	} while(cur < init);
-	return ret;
+struct solution* gradient_descent(graph g, get_neighborhood f, valid v){
+  struct solution* best_s = solution_create(g);
+  float current_f = f_opt(g, best_s, v);
+  float best_f = current_f;
+  bool end = false;
+  while(!end){
+    struct neighborhood *n = f(best_s);
+    end = true;
+    for(unsigned i = 0; i < n->size; ++i){
+      current_f = f_opt(g, n->neighbors[i], v);
+      if(current_f < best_f){
+	end=false;
+	best_f = current_f;
+	best_s = n->neighbors[i];
+      }
+    }
+  }
+  return best_s;
 }
