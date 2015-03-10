@@ -8,6 +8,7 @@
 #include <neighborhood.h>
 #include <explicit_enumeration.h>
 #include <gradient_descent.h>
+#include <taboo.h>
 
 typedef struct solution* (*heuristic_impl)(graph, get_neighborhood, valid);
 
@@ -18,7 +19,8 @@ struct heuristic_info{
 
 struct heuristic_info heuristics[] = {
   {"explicit_enum", explicit_enumeration},
-  {"gradient_descent", gradient_descent}
+  {"gradient_descent", gradient_descent},
+  {"taboo", taboo}
 };
 
 #define NB_HEURISTICS (sizeof(heuristics)/sizeof(struct heuristic_info))
