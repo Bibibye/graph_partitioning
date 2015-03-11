@@ -1,5 +1,6 @@
 #include "taboo.h"
 #include <assert.h>
+#include <stdio.h>
 
 #define TABOO_SIZE 10
 #define TABOO_ITERMAX 100
@@ -48,7 +49,7 @@ struct solution* taboo(graph g, get_neighborhood f, valid v) {
 }
 
 static bool fifo_in(struct solution* s) {
-	assert(in != NULL);
+	if(in == NULL) return false;
 	fifo* it = in;
 	while(it != NULL) {
 		if(solution_eq(s, it->e))
@@ -78,7 +79,8 @@ static void fifo_push(struct solution *s) {
 	newin->nxt = in;
 	if(in != NULL) {
 		in->prv = newin;
-	}
+	} else
+		out = newin;
 	in = newin;
 	fifo_size++;
 }
@@ -88,6 +90,4 @@ static void fifo_del() {
 		struct solution* s = fifo_popfree();
 		solution_destruct(s);
 	}
-	out = in = NULL;
-	fifo_size = 0;
 }
