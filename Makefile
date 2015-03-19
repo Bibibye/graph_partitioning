@@ -15,12 +15,18 @@ else
 	CFLAGS+= -O2
 endif
 
+ifeq ($(RANDOM_ANNEALING),yes)
+	CFLAGS+= -DSIMULATED_ANNEALING_RANDOM_ACCEPTATION
+endif
+
 SRC=$(wildcard $(SRC_DIR)/*.c)
 OBJS=$(SRC:%.c=%.o)
 
 OUT=partition
 
 .PHONY: clean all mrproper
+
+.PRECIOUS: %.d
 
 all: $(OUT)
 
