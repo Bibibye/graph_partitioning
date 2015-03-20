@@ -90,6 +90,17 @@ make RANDOM_ANNEALING=yes SIMULATED_ANNEALING_ACCEPTATION_PROBA=1000
      SIMULATED_ANNEALING_RATIO=0.8
 \end{verbatim}
 \section{Recherche tabou}
+La recherche par tabou, suivant les recommandations du cours, reste
+simple pour éviter les complications : la liste des tabous à chaque itération est stockée 
+dans une file dans laquelle on pousse les voisins examinés 
+à chaque itération (en retirant le plus ancien s'il n'y a pas de place).
+
+Il y a donc deux paramètres :
+\begin{itemize}
+\item \texttt{TABOO\_{}SIZE}, par défaut à 10 : c'est la taille de la liste d'exclusion.
+\item \texttt{TABOO\_{}ITERMAX}, le nombre maximal d'itération, par défaut 100.
+\end{itemize}
+Comme avec les autres méthodes, ces paramètres sont changeables à la compilation.
 
 \section{Résultats}
 
