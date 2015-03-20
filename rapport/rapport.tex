@@ -73,6 +73,26 @@ Pour notre méthode par énumération, nous avons choisi une énumération expli
 Bien que la notion de voisinage n'ait aucun sens pour cette méthode, il faut quand même en spécifier un à l'exécution de notre programme (toutes les méthodes sont traitées de manière générique). Ce dernier ne sera pas utilisé.
 
 \section{Descente de gradient}
+La partie essentielle de l'algorithme est assez directe
+(fonction \texttt{\_{}gradient\_{}descent}). L'intérêt se situe dans l'autre fonction
+qui génère un ensemble de solutions initiales, dont la taille est donnée par la macro 
+\texttt{DESC\_SEED(v)}, v étant le nombre de sommets. On peut voir sur quelques exécutions le changement : par exemple
+sur le graphe à 100 sommets, on obtient non négligeable : on passe de 
+
+\begin{verbatim}
+$ make GRAD_OPTIM="'DESC_SEED(v)=1'"
+$ ./partition gradient_descent swap graphs/100.txt 
+f_opt = 862.000000
+\end{verbatim}
+à
+\begin{verbatim}
+$ make GRAD_OPTIM="'DESC_SEED(v)=v/10'"
+$ ./partition gradient_descent swap graphs/100.txt 
+...
+f_opt = 845.000000
+\end{verbatim}
+
+
 
 \section{Recuit simulé}
 Pour la méthode du recuit simulé, plusieurs paramètres sont à prendre en compte :
