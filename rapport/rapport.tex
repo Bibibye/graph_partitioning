@@ -89,6 +89,9 @@ Un exemple de compilation qui change certains paramètres du recuit simulé :
 make RANDOM_ANNEALING=yes SIMULATED_ANNEALING_ACCEPTATION_PROBA=1000
      SIMULATED_ANNEALING_RATIO=0.8
 \end{verbatim}
+
+\'Etonamment, notre recuit simulé semble ne pas fonctionner avec le voisinnage pick'n drop sur des graphes avec un nombre de sommets impair.
+
 \section{Recherche tabou}
 La recherche par tabou, suivant les recommandations du cours, reste
 simple pour éviter les complications : la liste des tabous à chaque itération est stockée 
