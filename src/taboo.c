@@ -2,9 +2,6 @@
 #include <assert.h>
 #include <stdio.h>
 
-#define TABOO_SIZE 10
-#define TABOO_ITERMAX 100
-
 struct fifo {
 	struct solution* e;
 	struct fifo *nxt, *prv;
