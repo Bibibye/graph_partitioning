@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 
 #include <graph.h>
 #include <partitioning.h>
@@ -68,7 +69,6 @@ static get_neighborhood find_neighborhood(const char *name){
 int main(int argc, char **argv){
   if(argc != 4)
     usage(argv[0]);
-  
   heuristic_impl h = NULL;
   graph g = NULL;
   get_neighborhood n = NULL;
@@ -84,9 +84,10 @@ int main(int argc, char **argv){
   
   g = graph_create(argv[3]);
   
+  time_t start = time(NULL);
   s = h(g, n, one_percent_error);
-  solution_dump(s);
-  printf("f_opt = %f\n", f_opt(g, s, one_percent_error));
+  //solution_dump(s);
+  printf("%f %ld\n", f_opt(g, s, one_percent_error), time(NULL) - start);
   
   solution_destruct(s);
   graph_destruct(g);
