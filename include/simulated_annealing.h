@@ -4,14 +4,26 @@
 #include <neighborhood.h>
 #include <partitioning.h>
 
+#ifndef SIMULATED_ANNEALING_T_0
 #define SIMULATED_ANNEALING_T_0 1000
+#endif /* SIMULATED_ANNEALING_T_0 */
 
 /* Will be multiplicated by the number of vertices */
+#ifndef SIMULATED_ANNEALING_NB_FAIL_MAX
 #define SIMULATED_ANNEALING_NB_FAIL_MAX 10
+#endif /* SIMULATED_ANNEALING_NB_FAIL_MAX */
 
+#ifndef SIMULATED_ANNEALING_ACCEPTATION_PROBA
 #define SIMULATED_ANNEALING_ACCEPTATION_PROBA 100
+#endif /* SIMULATED_ANNEALING_ACCEPTATION_PROBA */
 
+#ifndef SIMULATED_ANNEALING_T_MIN
 #define SIMULATED_ANNEALING_T_MIN 0.1
+#endif /* SIMULATED_ANNEALING_T_MIN */
+
+#ifndef SIMULATED_ANNEALING_RATIO
+#define SIMULATED_ANNEALING_RATIO 0.9
+#endif /* SIMULATED_ANNEALING_RATIO */
 
 struct solution* simulated_annealing(graph g, get_neighborhood f, valid v);
 

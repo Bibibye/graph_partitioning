@@ -11,7 +11,7 @@ static struct solution *choose_neighbor(struct neighborhood *n){
 }
 
 static float temperature_variation(float t){
-  return t * 0.9;
+  return t * SIMULATED_ANNEALING_RATIO;
 }
 
 static unsigned proba(float delta_f, unsigned t){
