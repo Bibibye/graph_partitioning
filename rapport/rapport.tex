@@ -1,0 +1,101 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{csquotes}
+\usepackage{hyperref}
+
+\begin{document}
+\newcommand\Nom\textsc
+\newcommand\Terme\textit
+
+\title{Partitionnement de graphes}
+\author{\Nom{Raphaël Gaudy} \and \Nom{Joris Pablo}}
+\date\today
+\maketitle
+
+\begin{center}
+Pour le vendredi 20 Mars 2015, 18h00
+\end{center}
+
+\section{Introduction}
+Ce projet de Graphes et Recherche Opérationnelle a pour problème de décomposer des graphes en $K$ classes à peu près équivalentes en minimisant le poids des arêtes inter-classes. Cette décomposition doit être possible selon 4 méthodes différentes : énumération, descente de gradient, recuit simulé et une méta-heuristique au choix (nous avons choisi la méthode de la recherche tabou). Ce rapport explique comment utiliser notre code et détaille nos choix d'implémentation.
+
+\section{Définition des termes du problème et utilisation du code fourni}
+\'Etant donné l'énoncé du problème, il est important de définir quel est $K$ et ce que signifie ``à peu près équitable''. Nous avons fait le choix de définir $K$ à la compilation de notre exécutable (2 par défaut si rien n'est spécifié), et ``à peu près équitable'' est un prédicat évalué vrai si la différence de taille entre tout couple de classes d'une solution est au plus de 1\% (arrondi au supérieur).
+
+Pour compiler le projet, il suffit d'utiliser :
+
+\begin{verbatim}
+make
+\end{verbatim}
+
+Ou, si on veut changer le nombre de classes (par exemple 3) :
+
+\begin{verbatim}
+make K=3
+\end{verbatim}
+
+Un exécutable \texttt{partition} est créé et propose le message d'aide suivant :
+
+\begin{verbatim}
+$ ./partition 
+Usage : ./partition <heuristic> <neighborhood> <filename>
+
+Heuristics available are :
+    - explicit_enum
+    - gradient_descent
+    - taboo
+    - simulated_annealing
+
+Neighborhoods available are :
+    - swap
+    - sweep
+    - pick_n_drop
+\end{verbatim}
+
+Le graphe \texttt{filename} doit être du même format que les graphes présents dans le répertoire \texttt{graphs} (celui convenu pour le projet).
+
+Un exemple d'utilisation :
+
+\begin{verbatim}
+$ ./partition gradient_descent swap graphs/10.txt
+{3 5 2 9 10}
+{1 8 4 6 7}
+f_opt = 13.000000
+\end{verbatim}
+
+La sortie donne donc le partitionnement optimal trouvé (ici en 2 classes) ainsi que la valeur de notre fonction à minimiser pour cette solution.
+
+\section{\'Enumération}
+Pour notre méthode par énumération, nous avons choisi une énumération explicite. De manière à pouvoir les énumérer simplement, chaque solution est représentée par un nombre en base $K$ de $n$ digits ($n$ étant le nombre de sommets du graphe). Dans une solution donnée de la forme $d_1 d_2 \dots d_n$, chaque sommet $i$ se trouve dans la classe $d_i$. Il suffit donc de compter de $0 \dots 0$ à $(K-1) \dots (K-1)$ pour passer en revu toutes les solutions (certaines sont considérées plusieurs fois par alpha-équivalence sur les classes).
+
+Bien que la notion de voisinage n'ait aucun sens pour cette méthode, il faut quand même en spécifier un à l'exécution de notre programme (toutes les méthodes sont traitées de manière générique). Ce dernier ne sera pas utilisé.
+
+\section{Descente de gradient}
+
+\section{Recuit simulé}
+Pour la méthode du recuit simulé, plusieurs paramètres sont à prendre en compte :
+\begin{itemize}
+\item La solution initiale : par simplicité, nous avons sélectionné la solution initiale au hasard.
+\item La température initiale : cette dernière peut être définie à la compilation (variable \texttt{SIMULATED\_ANNEALING\_T\_0}). Par défaut, elle vaut 1000.
+\item La condition de sortie de la première boucle : par défaut, on sort de la boucle lorsque la température a atteint une certaine valeur (0.1 par défaut). Cette valeur peut être changée à la compilation (variable \texttt{SIMULATED\_ANNEALING\_T\_MIN}). On peut aussi choisir à la compilation de définir une probabilité d'acceptation, auquel cas la condition sur la température n'est plus vérifiée (variable \texttt{RANDOM\_ANNEALING} à \texttt{yes} pour activer, et variable \texttt{SIMULATED\_ANNEALING\_ACCEPTATION\_PROBA} à changer pour modifier la proba. Par défaut, cette variable vaut 100, ce qui équivaut à 1 chance sur 100).
+\item La condition de sortie de la deuxième boucle : on sort de la deuxième boucle lorsqu'on a sélectionné un nombre de fois donné une solution moins bonne que la solution courante (par défaut $10 \times n$ avec $n$ le nombre de sommets du graphe). Cette valeur peut être changée à la compilation (avec la variable \texttt{SIMULATED\_ANNEALING\_NB\_FAIL\_MAX} qui sera multipliée par $n$).
+\item La varitation de température : nous avons choisi de suivre une suite géométrique de raison $0.9$ par défaut. Encore une fois, ce paramètre peut être changé à la compilation avec la variable \texttt{SIMULATED\_ANNEALING\_RATIO}.
+\end{itemize}
+
+Un exemple de compilation qui change certains paramètres du recuit simulé :
+\begin{verbatim}
+make RANDOM_ANNEALING=yes SIMULATED_ANNEALING_ACCEPTATION_PROBA=1000
+     SIMULATED_ANNEALING_RATIO=0.8
+\end{verbatim}
+\section{Recherche tabou}
+
+\section{Résultats}
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
